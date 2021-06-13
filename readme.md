@@ -4,7 +4,6 @@ A rhythm game controller board code for Raspberry Pi Pico.
 
 
 ## Installation
----
 Will be written later
 
 1. Compile the code / Download the PicoDX.uf2 file.
@@ -13,7 +12,6 @@ Will be written later
 4. The Pico will restart and should show up as a controller.
 
 ## ToDo
----
 1. Complete input handler class
 2. Write HID Lighting handler class
 3. Write the hardware handlers
