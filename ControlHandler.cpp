@@ -3,8 +3,10 @@
 ControlHandler::ControlHandler(int * btnPins, int btnNum){
     btnCount = btnNum;
     btnPtr = btnPins;
-	gpio_init();
+	
 	for (int i = 0; i < btnCount; i++){
+		//initialize gpio pin
+		gpio_init(btnPtr[i]);
 		//set input pins for buttons
 		gpio_set_dir(btnPtr[i], GPIO_IN);
 		//set pull up
@@ -25,12 +27,12 @@ void ControlHandler::task_poll(){
     controlState.zAxis = 0; 
 }
 
-void poll_buttons(){
+void ControlHandler::poll_buttons(){
 	static uint32_t pinState = gpio_get_all();
 	for (int i = 0; i < btnCount; i++){
 		controlState.buttons |= ((pinState >> btnPtr[i]) && 0x1) << i; 
 	}
 }
 
-void poll_analogs(){
+void ControlHandler::poll_analogs(){
 }

@@ -8,11 +8,11 @@
 class ControlHandler{
 
 private:
+    int btnCount;
+    int * btnPtr;
     void poll_buttons();
     void poll_analogs();
     picodxReport controlState;
-    int btnCount;
-    int * btnPtr;
 
 public:
     ControlHandler(int * btnPins, int btnNum);
