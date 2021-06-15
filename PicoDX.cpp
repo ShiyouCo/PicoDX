@@ -71,7 +71,7 @@ int main(void)
     tud_task(); // tinyusb device task
     led_blinking_task();
 
-    dxInput.task_poll(); //poll buttons
+    dxInput.task_poll(); //poll inputs
     
     
     //xAxisTest = (xAxisTest + 1) % 255;

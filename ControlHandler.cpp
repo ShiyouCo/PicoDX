@@ -21,17 +21,24 @@ picodxReport * ControlHandler::get_report(){
 void ControlHandler::task_poll(){
 	poll_buttons();
 	poll_analogs();
-    //controlState.buttons = 0x5555;
     controlState.xAxis = 0;
     controlState.yAxis = 0;
     controlState.zAxis = 0; 
 }
 
 void ControlHandler::poll_buttons(){
-	static uint32_t pinState = gpio_get_all();
+	
 	for (int i = 0; i < btnCount; i++){
-		controlState.buttons |= ((pinState >> btnPtr[i]) && 0x1) << i; 
+		bool btnRead = gpio_get(btnPtr[i]);
+		if (!btnRead){
+			controlState.buttons |= ((uint16_t)0x01 << btnPtr[i]);
+		}
+		else
+		{
+			controlState.buttons &= ~((uint16_t)0x01 << btnPtr[i]);
+		}
 	}
+
 }
 
 void ControlHandler::poll_analogs(){
