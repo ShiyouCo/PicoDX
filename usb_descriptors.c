@@ -49,8 +49,9 @@ tusb_desc_device_t const desc_device =
     .bDeviceProtocol    = 0x00,
     .bMaxPacketSize0    = CFG_TUD_ENDPOINT0_SIZE,
 
-    .idVendor           = 0xCafe, // VID
-    .idProduct          = USB_PID, // PID
+    .idVendor           = 0x1ccf, // VID
+    //.idProduct          = USB_PID, // PID
+    .idProduct          = 0x1018, // PID
     .bcdDevice          = 0x0100,
 
     .iManufacturer      = 0x01,
@@ -285,7 +286,7 @@ char const* string_desc_arr [] =
 {
   (const char[]) { 0x09, 0x04 }, // 0: is supported language is English (0x0409)
   "Konami Amusement",                     // 1: Manufacturer
-  "beatmania IIDX Entry Model",              // 2: Product
+  "beatmania IIDX controller Entry Model",              // 2: Product
   "123456",                      // 3: Serials, should use chip ID
 };
 
