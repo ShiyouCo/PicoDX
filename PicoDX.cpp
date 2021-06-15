@@ -53,6 +53,7 @@ int btnPins[11] = {0,1,2,3,4,5,6,7,8,9,10};
 ControlHandler dxInput(btnPins, 11);
 
 picodx_hid hidHandler;
+volatile uint16_t hidLightReport;
 uint32_t last_send = 0;
 
 static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
@@ -62,19 +63,22 @@ void led_blinking_task(void);
 /*------------- MAIN -------------*/
 int main(void)
 {
-  //board_init();
+
+  // test
+  //gpio_init(PICO_DEFAULT_LED_PIN);
+  //gpio_set_dir(PICO_DEFAULT_LED_PIN, true);
+ 
   tusb_init();
 
   while (1)
   {
     
     tud_task(); // tinyusb device task
-    led_blinking_task();
 
-    dxInput.task_poll(); //poll inputs
-    
-    
-    //xAxisTest = (xAxisTest + 1) % 255;
+    dxInput.task_poll(); // poll inputs
+    dxInput.lights_task(&hidLightReport, true); // control lights
+
+
     if (board_millis() - last_send > 1 && tud_hid_ready() )     {
       last_send = board_millis();
       hidHandler.sendReport(dxInput.get_report());
@@ -147,20 +151,9 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
   (void) report_type;
   (void) buffer;
   (void) bufsize;
-}
+  // Lights here
+  if (bufsize == 2){
+    hidLightReport = buffer[0] << 8 + buffer[1];
+  }
 
-//--------------------------------------------------------------------+
-// BLINKING TASK
-//--------------------------------------------------------------------+
-void led_blinking_task(void)
-{
-  static uint32_t start_ms = 0;
-  static bool led_state = false;
-
-  // Blink every interval ms
-  if ( board_millis() - start_ms < blink_interval_ms) return; // not enough time
-  start_ms += blink_interval_ms;
-
-  //board_led_write(led_state);
-  led_state = 1 - led_state; // toggle
 }

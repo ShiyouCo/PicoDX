@@ -15,15 +15,19 @@ ControlHandler::ControlHandler(int * btnPins, int btnNum){
 }
 
 picodxReport * ControlHandler::get_report(){
+
     return &controlState;
+
 }
 
 void ControlHandler::task_poll(){
+
 	poll_buttons();
 	poll_analogs();
     controlState.xAxis = 0;
     controlState.yAxis = 0;
     controlState.zAxis = 0; 
+
 }
 
 void ControlHandler::poll_buttons(){
@@ -42,4 +46,18 @@ void ControlHandler::poll_buttons(){
 }
 
 void ControlHandler::poll_analogs(){
+}
+
+void ControlHandler::set_lights(uint16_t lightState){
+	// control hardware side here
+}
+
+void ControlHandler::lights_task(volatile uint16_t * hidLightState, bool isHIDMode){
+	if (isHIDMode){
+		set_lights(*hidLightState);
+	}
+	else{
+		set_lights(controlState.buttons);
+	}
+
 }
