@@ -11,6 +11,7 @@ ControlHandler::ControlHandler(int * btnPins, int btnNum){
 		gpio_set_dir(btnPtr[i], GPIO_IN);
 		//set pull up
 		gpio_set_pulls(btnPtr[i], true, false);
+
 	}
 }
 
@@ -20,13 +21,9 @@ picodxReport * ControlHandler::get_report(){
 
 }
 
-void ControlHandler::task_poll(){
+void ControlHandler::poll_task(){
 
 	poll_buttons();
-	poll_analogs();
-    controlState.xAxis = 0;
-    controlState.yAxis = 0;
-    controlState.zAxis = 0; 
 
 }
 
@@ -45,7 +42,16 @@ void ControlHandler::poll_buttons(){
 
 }
 
-void ControlHandler::poll_analogs(){
+void ControlHandler::set_analog_x(uint8_t value){
+	controlState.xAxis = value;
+}
+
+void ControlHandler::set_analog_y(uint8_t value){
+	controlState.yAxis = value;
+}
+
+void ControlHandler::set_analog_z(uint8_t value){
+	controlState.zAxis = value;
 }
 
 void ControlHandler::set_lights(uint16_t lightState){

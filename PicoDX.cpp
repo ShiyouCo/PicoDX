@@ -33,58 +33,48 @@
 #include "usb_descriptors.h"
 #include "picodx_hid.h"
 #include "ControlHandler.h"
+#include "pio_rotary_encoder.cpp"
 
-//--------------------------------------------------------------------+
-// MACRO CONSTANT TYPEDEF PROTYPES
-//--------------------------------------------------------------------+
-
-/* Blink pattern
- * - 250 ms  : device not mounted
- * - 1000 ms : device mounted
- * - 2500 ms : device is suspended
- */
-enum  {
-  BLINK_NOT_MOUNTED = 250,
-  BLINK_MOUNTED = 1000,
-  BLINK_SUSPENDED = 2500,
-};
 
 int btnPins[11] = {0,1,2,3,4,5,6,7,8,9,10};
+int encoderPinA = 11; //pin B should be connected to GPIO12
+
+int RotaryEncoder::rotation = 0;
+RotaryEncoder encoder(encoderPinA);
 ControlHandler dxInput(btnPins, 11);
 
 picodx_hid hidHandler;
 volatile uint16_t hidLightReport;
 uint32_t last_send = 0;
 
-static uint32_t blink_interval_ms = BLINK_NOT_MOUNTED;
-
 void led_blinking_task(void);
 
 /*------------- MAIN -------------*/
 int main(void)
 {
-
-  // test
-  //gpio_init(PICO_DEFAULT_LED_PIN);
-  //gpio_set_dir(PICO_DEFAULT_LED_PIN, true);
  
   tusb_init();
 
+  //initialize encoder
+  encoder.set_rotation(0);
+
   while (1)
   {
-    
-    tud_task(); // tinyusb device task
+    // tinyusb device task
+    tud_task(); 
 
-    dxInput.task_poll(); // poll inputs
-    dxInput.lights_task(&hidLightReport, true); // control lights
+    // poll inputs
+    dxInput.poll_task();
+    // set analog x value from encoder rotation
+    dxInput.set_analog_x((uint8_t) encoder.get_rotation());
+    // control lights
+    dxInput.lights_task(&hidLightReport, true); 
 
-
+    // send data every 1 ms when tud_hid is ready
     if (board_millis() - last_send > 1 && tud_hid_ready() )     {
       last_send = board_millis();
       hidHandler.sendReport(dxInput.get_report());
     }
-    
-
   }
 
   return 0;
@@ -97,13 +87,13 @@ int main(void)
 // Invoked when device is mounted
 void tud_mount_cb(void)
 {
-  blink_interval_ms = BLINK_MOUNTED;
+ 
 }
 
 // Invoked when device is unmounted
 void tud_umount_cb(void)
 {
-  blink_interval_ms = BLINK_NOT_MOUNTED;
+
 }
 
 // Invoked when usb bus is suspended
@@ -112,13 +102,13 @@ void tud_umount_cb(void)
 void tud_suspend_cb(bool remote_wakeup_en)
 {
   (void) remote_wakeup_en;
-  blink_interval_ms = BLINK_SUSPENDED;
+
 }
 
 // Invoked when usb bus is resumed
 void tud_resume_cb(void)
 {
-  blink_interval_ms = BLINK_MOUNTED;
+
 }
 
 //--------------------------------------------------------------------+
@@ -151,7 +141,7 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
   (void) report_type;
   (void) buffer;
   (void) bufsize;
-  // Lights here
+  // Handle lights HID report here
   if (bufsize == 2){
     hidLightReport = buffer[0] << 8 + buffer[1];
   }
