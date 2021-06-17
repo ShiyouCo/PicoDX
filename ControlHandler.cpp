@@ -43,15 +43,15 @@ void ControlHandler::poll_buttons(){
 }
 
 void ControlHandler::set_analog_x(uint8_t value){
-	controlState.xAxis = value;
+	controlState.xAxis = value % 255;
 }
 
 void ControlHandler::set_analog_y(uint8_t value){
-	controlState.yAxis = value;
+	controlState.yAxis = value % 255;
 }
 
 void ControlHandler::set_analog_z(uint8_t value){
-	controlState.zAxis = value;
+	controlState.zAxis = value % 255;
 }
 
 void ControlHandler::set_lights(uint16_t lightState){
