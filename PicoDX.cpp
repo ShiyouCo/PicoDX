@@ -28,7 +28,8 @@
 #include <string.h>
 
 #include "bsp/board.h"
-#include "tusb.h"
+//#include "tusb.h"
+//#include "pico/stdlib.h"
 
 #include "usb_descriptors.h"
 #include "picodx_hid.h"
@@ -36,12 +37,15 @@
 #include "pio_rotary_encoder.cpp"
 
 
-int btnPins[11] = {0,1,2,3,4,5,6,7,8,9,10};
-int encoderPinA = 11; //pin B should be connected to GPIO12
+//int btnPins[11] = {0,1,2,3,4,5,6,7,8,9,10};
+
+int btnPins[11] = {4,6,8,10,12,14,16,18,20,22,27};
+int ledPins[11] = {5,7,9,11,13,15,17,19,21,23,28};
+int encoderPinA = 0; //pin B should be connected to GPIO1
 
 int RotaryEncoder::rotation = 0;
 RotaryEncoder encoder(encoderPinA);
-ControlHandler dxInput(btnPins, 11);
+ControlHandler dxInput(btnPins, 11, ledPins, 11);
 
 picodx_hid hidHandler;
 volatile uint16_t hidLightReport;
@@ -53,6 +57,7 @@ void led_blinking_task(void);
 int main(void)
 {
  
+
   tusb_init();
 
   //initialize encoder
@@ -71,10 +76,11 @@ int main(void)
     dxInput.lights_task(&hidLightReport, true); 
 
     // send data every 1 ms when tud_hid is ready
-    if (board_millis() - last_send > 1 && tud_hid_ready() )     {
+    if (board_millis() - last_send > 1 && tud_hid_ready() ) {
       last_send = board_millis();
       hidHandler.sendReport(dxInput.get_report());
     }
+
   }
 
   return 0;
@@ -142,8 +148,13 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
   (void) buffer;
   (void) bufsize;
   // Handle lights HID report here
-  if (bufsize == 2){
-    hidLightReport = buffer[0] << 8 + buffer[1];
+  if (report_type == 0x04){
+    if (bufsize == 2){
+     hidLightReport = buffer[0] << 8 + buffer[1];
+    }
+  }
+  else if (report_type == 0x06){
+
   }
 
 }

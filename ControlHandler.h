@@ -10,6 +10,8 @@ class ControlHandler{
 private:
     int btnCount;
     int * btnPtr;
+    int ledCount;
+    int * ledPtr;
     //Polls buttons state
     void poll_buttons();
     //Sets light display
@@ -20,7 +22,7 @@ private:
 
 public:
     //Constructor
-    ControlHandler(int * btnPins, int btnNum);
+    ControlHandler(int * btnPins, int btnNum, int * ledPins, int ledNum);
     //Call every cycle to poll controller's state
     void poll_task();
     //Get report
