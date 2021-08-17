@@ -71,6 +71,7 @@ uint8_t const * tud_descriptor_device_cb(void)
 //--------------------------------------------------------------------+
 // HID Report Descriptor
 //--------------------------------------------------------------------+
+
 /*
 uint8_t const desc_hid_report[] =
 {
@@ -81,6 +82,7 @@ uint8_t const desc_hid_report[] =
   TUD_HID_REPORT_DESC_GAMEPAD ()
 };
 */
+
 uint8_t const desc_hid_report[] =
 {
   	0x05, 0x01,                    /* USAGE_PAGE (Generic Desktop) */ 
@@ -189,7 +191,7 @@ uint8_t const desc_hid_report[] =
     0xc0,                          /*     END_COLLECTION */ 
     /*Led 8 */ 
     0x05, 0x0a,                    /*     USAGE_PAGE (Ordinals) */ 
-    0x09, 0x08,                    /*     USAGE (Instance 😎 */ 
+    0x09, 0x08,                    /*     USAGE (Instance 8) */ 
     0xa1, 0x02,                    /*     COLLECTION (Logical) */ 
     0x05, 0x08,                    /*       USAGE_PAGE (LEDs) */ 
     0x09, 0x4b,                    /*       USAGE (Generic Indicator 1) */ 
