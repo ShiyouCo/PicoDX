@@ -42,9 +42,12 @@
 int btnPins[11] = {4,6,8,10,12,14,16,18,20,22,27};
 int ledPins[11] = {5,7,9,11,13,15,17,19,21,23,28};
 int encoderPinA = 0; //pin B should be connected to GPIO1
+//int encoderPinA2 = 2; //pin B should be connected to GPIO3
 
 int RotaryEncoder::rotation = 0;
-RotaryEncoder encoder(encoderPinA);
+
+RotaryEncoder encoder(encoderPinA, false, false); // set pull up and pull down resistor for the encoder. Some encoder requires both to be turned off.
+//RotaryEncoder encoder2(encoderPinA2, false, false);
 ControlHandler dxInput(btnPins, 11, ledPins, 11);
 
 picodx_hid hidHandler;
@@ -62,6 +65,7 @@ int main(void)
 
   //initialize encoder
   encoder.set_rotation(0);
+  //encoder2.set_rotation(0);
 
   while (1)
   {
@@ -72,6 +76,7 @@ int main(void)
     dxInput.poll_task();
     // set analog x value from encoder rotation
     dxInput.set_analog_x((uint8_t) encoder.get_rotation());
+    //dxInput.set_analog_y((uint8_t) encoder2.get_rotation());
     // control lights
     dxInput.lights_task(&hidLightReport, true); 
 

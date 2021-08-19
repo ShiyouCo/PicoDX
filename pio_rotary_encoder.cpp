@@ -23,7 +23,7 @@ public:
     // constructor
     // rotary_encoder_A is the pin for the A of the rotary encoder.
     // The B of the rotary encoder has to be connected to the next GPIO.
-    RotaryEncoder(uint rotary_encoder_A)
+    RotaryEncoder(uint rotary_encoder_A, bool pullup, bool pulldown)
     {
         uint8_t rotary_encoder_B = rotary_encoder_A + 1;
         // pio 0 is used
@@ -32,9 +32,9 @@ public:
         uint8_t sm = 0;
         // configure the used pins as input with pull up
         pio_gpio_init(pio, rotary_encoder_A);
-        gpio_set_pulls(rotary_encoder_A, true, false);
+        gpio_set_pulls(rotary_encoder_A, pullup, pulldown);
         pio_gpio_init(pio, rotary_encoder_B);
-        gpio_set_pulls(rotary_encoder_B, true, false);
+        gpio_set_pulls(rotary_encoder_B, pullup, pulldown);
         // load the pio program into the pio memory
         uint offset = pio_add_program(pio, &pio_rotary_encoder_program);
         // make a sm config
