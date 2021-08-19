@@ -5,10 +5,11 @@ A rhythm game controller board code for Raspberry Pi Pico.
 ## Features
 
 1. 11 Buttons
-2. HID Lighting and Reactive Lights mode (WIP)
-3. Supports Infinitas and IIDX Ultimate Mobile
-4. Analog and Digital Turntable modes (WIP)
-5. WS2812B LED Strips for buttons and TT (WIP)
+2. 11 Leds
+3. HID Lighting and Reactive Lights mode (WIP)
+4. Supports Infinitas and IIDX Ultimate Mobile
+5. Analog and Digital Turntable modes (WIP)
+6. WS2812B LED Strips for buttons and TT (WIP)
 
 ## GPIO Assignments
 
@@ -62,7 +63,6 @@ make
 
 
 ## ToDo
-1. Test encoder function
-2. Write light hardware controller
-3. Implement littleFS for configurations
-4. Write button combination handlers
+1. Test light hardware controller
+2. Implement littleFS for configurations
+3. Write button combination handlers
