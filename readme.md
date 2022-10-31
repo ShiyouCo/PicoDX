@@ -52,13 +52,23 @@ This is the default assignments of Raspberry Pi Pico's GPIO Pins. You can modify
 4. The Pico will restart and should show up as a controller.
 
 ## Building
-Make sure you've setup the rapsberry pi pico SDK on your environment. Clone the repo, and then inside the root folder of the repository :
+Make sure you've setup the rapsberry pi pico SDK on your environment. Clone the repo next to your pico-sdk folder, and then inside the root folder of the repository :
 
+For Linux environment
 ``` bash
 mkdir build
 cd ./build
 cmake ..
 make
+```
+
+or For Windows environment
+
+``` bash
+mkdir build
+cd build
+cmake -G "NMake Makefiles" ..
+nmake
 ```
 
 
