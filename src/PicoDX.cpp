@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "bsp/board.h"
+//#include "libs/McuLib/lib/littleFS/lfs.h"
 //#include "tusb.h"
 //#include "pico/stdlib.h"
 
@@ -49,6 +50,9 @@ int RotaryEncoder::rotation = 0;
 RotaryEncoder encoder(encoderPinA, false, false); // set pull up and pull down resistor for the encoder. Some encoder requires both to be turned off.
 //RotaryEncoder encoder2(encoderPinA2, false, false);
 ControlHandler dxInput(btnPins, 11, ledPins, 11);
+//lfs_t lfs;
+//lfs_file_t file;
+
 
 picodx_hid hidHandler;
 volatile uint16_t hidLightReport;
@@ -147,13 +151,15 @@ uint16_t tud_hid_get_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t
 void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
 {
   // TODO set LED based on CAPLOCK, NUMLOCK etc...
+  /*
   (void) itf;
   (void) report_id;
   (void) report_type;
   (void) buffer;
   (void) bufsize;
-  // Handle lights HID report here
-  if (report_type == 0x04){
+  */
+  // Handle lights HID report here (Report ID = 5, Type = 2)
+  if (report_type == 0x02){
     if (bufsize == 2){
      hidLightReport = buffer[0] << 8 + buffer[1];
     }
@@ -162,4 +168,15 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
 
   }
 
+}
+
+// Invoked when cdc when line state changed e.g connected/disconnected
+void tud_cdc_line_state_cb(uint8_t itf, bool dtr, bool rts) 
+{
+	(void)itf;
+	(void)rts;
+
+	if (dtr) {
+		tud_cdc_write_str("Connected\n");
+	}
 }

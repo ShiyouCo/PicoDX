@@ -1,1 +1,7 @@
 
+[submodule "libs/McuLib"]
+	path = libs/McuLib
+	url = https://github.com/ErichStyger/McuOnEclipseLibrary.git
+[submodule "libs/lfs"]
+	path = libs/lfs
+	url = https://github.com/lurk101/pico-littlefs.git

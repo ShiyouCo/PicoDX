@@ -19,12 +19,12 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(PicoDX PicoDX.cpp usb_descriptors.c picodx_hid.cpp ControlHandler.cpp pio_rotary_encoder.cpp) 
+add_executable(PicoDX src/PicoDX.cpp src/usb_descriptors.c src/picodx_hid.cpp src/ControlHandler.cpp libs/pio_rotary_encoder.cpp) 
 # Make sure TinyUSB can find tusb_config.h
 target_include_directories(PicoDX PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR})
+        ${CMAKE_CURRENT_LIST_DIR} src libs)
 
-pico_generate_pio_header(PicoDX ${CMAKE_CURRENT_LIST_DIR}/pio_rotary_encoder.pio)
+pico_generate_pio_header(PicoDX ${CMAKE_CURRENT_LIST_DIR}/libs/pio_rotary_encoder.pio)
 
 pico_set_program_name(PicoDX "PicoDX")
 pico_set_program_version(PicoDX "0.1")

@@ -71,9 +71,11 @@ void ControlHandler::set_lights(uint16_t lightState){
 		int stateRead = (lightState >> i) & 0x01;
 		if (stateRead != 0){
 			gpio_put(ledPtr[i], true);
+
 		}
 		else{
 			gpio_put(ledPtr[i], false);
+
 		}
 	}
 }
@@ -81,6 +83,7 @@ void ControlHandler::set_lights(uint16_t lightState){
 void ControlHandler::lights_task(volatile uint16_t * hidLightState, bool isHIDMode){
 	if (isHIDMode){
 		set_lights(*hidLightState);
+		
 	}
 	else{
 		set_lights(controlState.buttons);

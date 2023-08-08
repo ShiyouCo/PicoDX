@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "board.h": "c"
+        "board.h": "c",
+        "usb_descriptors.h": "c",
+        "tusb.h": "c"
     }
 }
