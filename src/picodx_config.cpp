@@ -8,33 +8,12 @@ Picodx_config::Picodx_config(){
 }
 
 short Picodx_config::getPropertyValue(property property){
-    short value = 0;
-    switch(property){
-        case property::RAINBOWMODE:
-            value = (propertyBitField >> RAINBOWMODE_BIT1) & 0x11;
-            break;  
-        case property::TTMODE:
-            value = (propertyBitField >> TTMODE_BIT) & 0x01;
-            break;
-        case property::LIGHTMODE:
-            value = (propertyBitField >> LIGHTMODE_BIT) & 0x01;
-            break;
-    }
+    short value = propertyBitField & (0x01 << property);
     return value;
 }
 
 void Picodx_config::setPropertyValue(property property, int value){
-    switch(property){
-        case property::RAINBOWMODE:
-            propertyBitField |= (0x11 << RAINBOWMODE_BIT2);
-            break;  
-        case property::TTMODE:
-            propertyBitField |= (0x01 << TTMODE_BIT);
-            break;
-        case property::LIGHTMODE:
-            propertyBitField |= (0x01 << LIGHTMODE_BIT);
-            break;
-    }
+    propertyBitField |= (value << property);
 };
 
 
