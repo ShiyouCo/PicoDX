@@ -6,10 +6,11 @@ A rhythm game controller board code for Raspberry Pi Pico.
 
 1. 11 Buttons
 2. 11 Leds
-3. HID Lighting and Reactive Lights mode (WIP)
-4. Supports Infinitas and IIDX Ultimate Mobile
-5. Analog and Digital Turntable modes (WIP)
-6. WS2812B LED Strips for buttons and TT (WIP)
+3. 2 Encoders
+4. HID Lighting and Reactive Lights mode
+5. Supports Infinitas and IIDX Ultimate Mobile
+6. Analog and Digital Turntable modes (WIP)
+7. WS2812B LED Strips for buttons and TT (Planned)
 
 ## GPIO Assignments
 
@@ -39,8 +40,10 @@ This is the default assignments of Raspberry Pi Pico's GPIO Pins. You can modify
 |21         |LED 9|
 |23         |LED 10|
 |28         |LED 11|
-|0          |Encoder Input A|
-|1          |Encoder Input B|
+|0          |Encoder 1 Input A|
+|1          |Encoder 1 Input B|
+|2          |Encoder 2 Input A|
+|3          |Encoder 2 Input B|
 
 
 
@@ -62,7 +65,7 @@ cmake ..
 make
 ```
 
-or For Windows environment
+For Windows environment with NMake
 
 ``` bash
 mkdir build
@@ -71,8 +74,16 @@ cmake -G "NMake Makefiles" ..
 nmake
 ```
 
+For Windows environment with MinGW
+
+``` bash
+mkdir build
+cd build
+cmake -G "MinGW Makefiles" ..
+nmake
+```
+
 
 ## ToDo
-1. Test light hardware controller
-2. Implement littleFS for configurations
-3. Write button combination handlers
+1. Implement littleFS for configurations
+2. Write button combination handlers

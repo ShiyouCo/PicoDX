@@ -36,6 +36,7 @@
 #include "picodx_hid.h"
 #include "ControlHandler.h"
 #include "pio_rotary_encoder.cpp"
+#include "FileManager.h"
 
 
 //int btnPins[11] = {0,1,2,3,4,5,6,7,8,9,10};
@@ -43,33 +44,39 @@
 int btnPins[11] = {4,6,8,10,12,14,16,18,20,22,27};
 int ledPins[11] = {5,7,9,11,13,15,17,19,21,23,28};
 int encoderPinA = 0; //pin B should be connected to GPIO1
-//int encoderPinA2 = 2; //pin B should be connected to GPIO3
+int encoderPinA2 = 2; //pin B should be connected to GPIO3
 
 int RotaryEncoder::rotation = 0;
+int RotaryEncoder::rotation1 = 0;
 
-RotaryEncoder encoder(encoderPinA, false, false); // set pull up and pull down resistor for the encoder. Some encoder requires both to be turned off.
-//RotaryEncoder encoder2(encoderPinA2, false, false);
+RotaryEncoder encoder(encoderPinA, encoderPinA2, true, false); // set pull up and pull down resistor for the encoder. Some encoder requires both to be turned off.
 ControlHandler dxInput(btnPins, 11, ledPins, 11);
 //lfs_t lfs;
 //lfs_file_t file;
 
 
 picodx_hid hidHandler;
+FileManager fManager;
 volatile uint16_t hidLightReport;
 uint32_t last_send = 0;
+
+uint32_t test_timer = 0;
 
 void led_blinking_task(void);
 
 /*------------- MAIN -------------*/
 int main(void)
 {
- 
+  
+  fManager = FileManager();
+
+  int mount = fManager.mountFS();
 
   tusb_init();
 
-  //initialize encoder
-  encoder.set_rotation(0);
-  //encoder2.set_rotation(0);
+  //initialize encoders
+  encoder.set_rotation0(0);
+  encoder.set_rotation1(0);
 
   while (1)
   {
@@ -79,8 +86,8 @@ int main(void)
     // poll inputs
     dxInput.poll_task();
     // set analog x value from encoder rotation
-    dxInput.set_analog_x((uint8_t) encoder.get_rotation());
-    //dxInput.set_analog_y((uint8_t) encoder2.get_rotation());
+    dxInput.set_analog_x((uint8_t) encoder.get_rotation0());
+    dxInput.set_analog_y((uint8_t) encoder.get_rotation1());
     // control lights
     dxInput.lights_task(&hidLightReport, true); 
 
@@ -88,6 +95,12 @@ int main(void)
     if (board_millis() - last_send > 1 && tud_hid_ready() ) {
       last_send = board_millis();
       hidHandler.sendReport(dxInput.get_report());
+    }
+
+    if ((board_millis() - test_timer) >= 500) {
+      test_timer = board_millis();
+
+      //fManager.ListDir();
     }
 
   }
@@ -161,7 +174,7 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
   // Handle lights HID report here (Report ID = 5, Type = 2)
   if (report_type == 0x02){
     if (bufsize == 2){
-     hidLightReport = buffer[0] << 8 + buffer[1];
+      hidLightReport = ((uint16_t)buffer[1] << 8) + (uint16_t)buffer[0];
     }
   }
   else if (report_type == 0x06){

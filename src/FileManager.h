@@ -5,14 +5,15 @@
 
 class FileManager{
 
-private:
+//private:
 
 public:
     //Constructor
     FileManager();
-    void LoadFile();
-    void SaveFile();
-
+    void loadFile();
+    void saveFile();
+    int mountFS();
+    void listDir();
 
 };
 

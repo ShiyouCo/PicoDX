@@ -87,6 +87,7 @@ void ControlHandler::lights_task(volatile uint16_t * hidLightState, bool isHIDMo
 	}
 	else{
 		set_lights(controlState.buttons);
+		
 	}
 
 }
