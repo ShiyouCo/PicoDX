@@ -56,6 +56,7 @@
 #endif
 
 // Device mode with rhport and speed defined by board.mk
+
 #if   BOARD_DEVICE_RHPORT_NUM == 0
   #define CFG_TUSB_RHPORT0_MODE     (OPT_MODE_DEVICE | BOARD_DEVICE_RHPORT_SPEED)
 #elif BOARD_DEVICE_RHPORT_NUM == 1
