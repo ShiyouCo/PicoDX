@@ -14,6 +14,7 @@ ControlHandler::ControlHandler(int * btnPins, int btnNum, int * ledPins, int led
 		//set pull up
 		gpio_set_pulls(btnPtr[i], true, false);
 
+
 	}
 
 	for (int i = 0; i < ledCount; i++){
@@ -39,18 +40,24 @@ void ControlHandler::poll_task(){
 }
 
 void ControlHandler::poll_buttons(){
+
+
+	uint16_t buildBtn = 0;
 	
-	for (int i = 0; i < btnCount; i++){
-		bool btnRead = gpio_get(btnPtr[i]);
-		if (!btnRead){
-			controlState.buttons |= ((uint16_t)0x01 << i);
+
+	for (int i = btnCount - 1; i >= 0; i--){
+		
+		if (!gpio_get(btnPtr[i])){ //true
+			buildBtn = (buildBtn << 1) | 1;
 		}
 		else
 		{
-			controlState.buttons &= ~((uint16_t)0x01 << i);
+			buildBtn <<= 1;
 		}
+		
 	}
 
+	controlState.buttons = buildBtn;
 }
 
 void ControlHandler::set_analog_x(uint8_t value){

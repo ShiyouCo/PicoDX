@@ -12,6 +12,7 @@ private:
     int * btnPtr;
     int ledCount;
     int * ledPtr;
+
     //Polls buttons state
     void poll_buttons();
     //Sets light display
