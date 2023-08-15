@@ -59,6 +59,8 @@ picodx_hid hidHandler;
 FileManager fManager;
 volatile uint16_t hidLightReport;
 uint32_t last_send = 0;
+uint32_t lastHidLightReport = 0;
+bool hidLightMode = false;
 
 uint32_t test_timer = 0;
 
@@ -85,22 +87,20 @@ int main(void)
 
     // poll inputs
     dxInput.poll_task();
-    // set analog x value from encoder rotation
+    // set analog x and y value from encoder rotation
     dxInput.set_analog_x((uint8_t) encoder.get_rotation0());
     dxInput.set_analog_y((uint8_t) encoder.get_rotation1());
     // control lights
-    dxInput.lights_task(&hidLightReport, true); 
+    dxInput.lights_task(&hidLightReport, hidLightMode); 
 
-    // send data every 1 ms when tud_hid is ready
-    if (board_millis() - last_send > 1 && tud_hid_ready() ) {
-      last_send = board_millis();
+    // send data when tud_hid is ready
+    if (tud_hid_ready() ) {
+      //last_send = board_millis();
       hidHandler.sendReport(dxInput.get_report());
     }
 
-    if ((board_millis() - test_timer) >= 500) {
-      test_timer = board_millis();
-
-      //fManager.ListDir();
+    if (board_millis() - lastHidLightReport > 1000){
+        hidLightMode = false;
     }
 
   }
@@ -175,6 +175,8 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
   if (report_type == 0x02){
     if (bufsize == 2){
       hidLightReport = ((uint16_t)buffer[1] << 8) + (uint16_t)buffer[0];
+      hidLightMode = true;
+      lastHidLightReport = board_millis();
     }
   }
   else if (report_type == 0x06){
