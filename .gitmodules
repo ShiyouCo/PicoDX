@@ -5,3 +5,6 @@
 [submodule "libs/lfs"]
 	path = libs/lfs
 	url = https://github.com/lurk101/pico-littlefs.git
+[submodule "pico-sdk"]
+	path = pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git

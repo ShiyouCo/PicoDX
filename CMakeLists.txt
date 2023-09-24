@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 #set(PICO_SDK_PATH "/home/shiyou/pico/pico-sdk")
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
-include(pico_sdk_import.cmake)
+include(pico-sdk/pico_sdk_init.cmake)
 
 project(PicoDX C CXX ASM)
 
