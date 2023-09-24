@@ -54,35 +54,13 @@ This is the default assignments of Raspberry Pi Pico's GPIO Pins. You can modify
 3. Copy the uf2 file into the RPI-RP2 drive.
 4. The Pico will restart and should show up as a controller.
 
-## Building
-Make sure you've setup the rapsberry pi pico SDK on your environment. Clone the repo next to your pico-sdk folder, and then inside the root folder of the repository :
+## Building note
 
-For Linux environment
-``` bash
-mkdir build
-cd ./build
-cmake ..
-make
-```
-
-For Windows environment with NMake
+After cloning the repo, initialize submodule with the command :
 
 ``` bash
-mkdir build
-cd build
-cmake -G "NMake Makefiles" ..
-nmake
+git submodule update --init --recursive
 ```
-
-For Windows environment with MinGW
-
-``` bash
-mkdir build
-cd build
-cmake -G "MinGW Makefiles" ..
-nmake
-```
-
 
 ## ToDo
 1. Implement littleFS for configurations
