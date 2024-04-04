@@ -32,6 +32,7 @@
 //#include "tusb.h"
 //#include "pico/stdlib.h"
 
+#include "multicore.h"
 #include "usb_descriptors.h"
 #include "picodx_hid.h"
 #include "ControlHandler.h"
@@ -67,9 +68,20 @@ uint32_t test_timer = 0;
 void led_blinking_task(void);
 
 /*------------- MAIN -------------*/
+void core1_main()
+{
+  while(1){
+
+    dxInput.lights_task(&hidLightReport, hidLightMode); 
+  }
+  
+}
+
 int main(void)
 {
   
+  multicore_launch_core1(core1_main);
+
   fManager = FileManager();
 
   int mount = fManager.mountFS();
@@ -91,7 +103,7 @@ int main(void)
     dxInput.set_analog_x((uint8_t) encoder.get_rotation0());
     dxInput.set_analog_y((uint8_t) encoder.get_rotation1());
     // control lights
-    dxInput.lights_task(&hidLightReport, hidLightMode); 
+    
 
     // send data when tud_hid is ready
     if (tud_hid_ready() ) {

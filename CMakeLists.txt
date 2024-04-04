@@ -19,10 +19,10 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(PicoDX src/PicoDX.cpp src/usb_descriptors.c src/picodx_hid.cpp src/ControlHandler.cpp libs/pio_rotary_encoder.cpp src/FileManager.cpp libs/lfs/littlefs-lib/pico_hal.c libs/lfs/littlefs-lib/lfs.c) 
+add_executable(PicoDX pico-sdk/src/rp2_common/pico_multicore/include/pico/multicore.h src/PicoDX.cpp src/usb_descriptors.c src/picodx_hid.cpp src/ControlHandler.cpp libs/pio_rotary_encoder.cpp src/FileManager.cpp libs/lfs/littlefs-lib/pico_hal.c libs/lfs/littlefs-lib/lfs.c) 
 # Make sure TinyUSB can find tusb_config.h
 target_include_directories(PicoDX PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR} src libs libs/lfs/littlefs-lib)
+        ${CMAKE_CURRENT_LIST_DIR} src libs libs/lfs/littlefs-lib pico-sdk/src/rp2_common/pico_multicore/include/pico)
 
 pico_generate_pio_header(PicoDX ${CMAKE_CURRENT_LIST_DIR}/libs/pio_rotary_encoder.pio)
 
@@ -35,7 +35,7 @@ pico_enable_stdio_usb(PicoDX 0)
 
 
 # Add the standard library to the build
-target_link_libraries(PicoDX pico_stdlib hardware_pio tinyusb_device tinyusb_board hardware_flash )
+target_link_libraries(PicoDX pico_stdlib hardware_pio tinyusb_device tinyusb_board hardware_flash pico_multicore)
 
 pico_add_extra_outputs(PicoDX)
 
