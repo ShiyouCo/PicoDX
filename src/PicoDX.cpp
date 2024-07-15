@@ -52,6 +52,7 @@ int RotaryEncoder::rotation1 = 0;
 
 RotaryEncoder encoder(encoderPinA, encoderPinA2, true, false); // set pull up and pull down resistor for the encoder. Some encoder requires both to be turned off.
 ControlHandler dxInput(btnPins, 11, ledPins, 11);
+Picodx_config config();
 //lfs_t lfs;
 //lfs_file_t file;
 
@@ -62,10 +63,16 @@ volatile uint16_t hidLightReport;
 uint32_t last_send = 0;
 uint32_t lastHidLightReport = 0;
 bool hidLightMode = false;
+bool digitalTTMode = false;
 
 uint32_t test_timer = 0;
 
 void led_blinking_task(void);
+
+void get_configurations(){
+  digitalTTMode = (config.getPropertyValue(TTMODE) == 1);
+  hidLightMode = (config.getPropertyValue(LIGHTMODE) == 1);
+}
 
 /*------------- MAIN -------------*/
 void core1_main()
@@ -92,6 +99,9 @@ int main(void)
   encoder.set_rotation0(0);
   encoder.set_rotation1(0);
 
+  //initialize configs
+  get_configurations();
+
   while (1)
   {
     // tinyusb device task
@@ -100,8 +110,10 @@ int main(void)
     // poll inputs
     dxInput.poll_task();
     // set analog x and y value from encoder rotation
-    dxInput.set_analog_x((uint8_t) encoder.get_rotation0());
+    //dxInput.set_analog_x((uint8_t) encoder.get_rotation0());
+    dxInput.set_turntable_0(digitalTTMode, (uint8_t) encoder.get_rotation0());
     dxInput.set_analog_y((uint8_t) encoder.get_rotation1());
+
     // control lights
     
 

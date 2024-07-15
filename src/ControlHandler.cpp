@@ -5,6 +5,8 @@ ControlHandler::ControlHandler(int * btnPins, int btnNum, int * ledPins, int led
 	ledCount = ledNum;
     btnPtr = btnPins;
 	ledPtr = ledPins;
+
+	
 	
 	for (int i = 0; i < btnCount; i++){
 		//initialize gpio pin
@@ -97,4 +99,30 @@ void ControlHandler::lights_task(volatile uint16_t * hidLightState, bool isHIDMo
 		
 	}
 
+}
+
+void ControlHandler::set_turntable(bool isDigital, uint8_t value){
+	
+	if(isDigital){
+		if(lastTTValue > value){
+			set_analog_x(254); //set to max
+			lastTTValue = value;
+			TTAlarm.reset();
+		}
+		else if(lastTTValue < value){
+			set_analog_x(0); //set to min
+			lastTTValue = value;
+			TTAlarm.reset();
+		}
+		else{
+			if (TTAlarm.has_elapsed()){
+				set_analog_x(127); //set to neutral
+				lastTTValue = value;
+				TTAlarm.reset();
+			}
+		}
+	}
+	else{
+		set_analog_x(value);
+	}
 }

@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "pico/stdlib.h"
 #include "picodx_hid.h"
+#include "alarm.h"
 
 class ControlHandler{
 
@@ -12,6 +13,8 @@ private:
     int * btnPtr;
     int ledCount;
     int * ledPtr;
+    Alarm TTAlarm;
+    uint8_t lastTTValue;
 
     //Polls buttons state
     void poll_buttons();
@@ -36,6 +39,8 @@ public:
     void set_analog_y(uint8_t value);
     //Set analog z value
     void set_analog_z(uint8_t value);
+    //Set turntables
+    void set_turntable_0(bool isDigital, uint8_t value);
 
 };
 #endif
