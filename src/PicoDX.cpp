@@ -38,6 +38,7 @@
 #include "ControlHandler.h"
 #include "pio_rotary_encoder.cpp"
 #include "FileManager.h"
+#include "picodx_config.h"
 
 
 //int btnPins[11] = {0,1,2,3,4,5,6,7,8,9,10};
@@ -52,7 +53,7 @@ int RotaryEncoder::rotation1 = 0;
 
 RotaryEncoder encoder(encoderPinA, encoderPinA2, true, false); // set pull up and pull down resistor for the encoder. Some encoder requires both to be turned off.
 ControlHandler dxInput(btnPins, 11, ledPins, 11);
-Picodx_config config();
+Picodx_config configs;
 //lfs_t lfs;
 //lfs_file_t file;
 
@@ -70,8 +71,8 @@ uint32_t test_timer = 0;
 void led_blinking_task(void);
 
 void get_configurations(){
-  digitalTTMode = (config.getPropertyValue(TTMODE) == 1);
-  hidLightMode = (config.getPropertyValue(LIGHTMODE) == 1);
+  digitalTTMode = (configs.getPropertyValue(TTMODE) == 1);
+  hidLightMode = (configs.getPropertyValue(LIGHTMODE) == 1);
 }
 
 /*------------- MAIN -------------*/

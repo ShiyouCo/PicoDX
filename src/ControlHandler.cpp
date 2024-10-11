@@ -101,7 +101,7 @@ void ControlHandler::lights_task(volatile uint16_t * hidLightState, bool isHIDMo
 
 }
 
-void ControlHandler::set_turntable(bool isDigital, uint8_t value){
+void ControlHandler::set_turntable_0(bool isDigital, uint8_t value){
 	
 	if(isDigital){
 		if(lastTTValue > value){

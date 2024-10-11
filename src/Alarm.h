@@ -5,7 +5,7 @@
 
 class Alarm{
     public:
-        Alarm(uint32_t interval) {start(interval);}
+        Alarm(){}
         
         void start(uint32_t interval) {
             interval_ms = interval;
@@ -33,4 +33,4 @@ class Alarm{
         uint32_t start_ts;
         uint32_t interval_ms;
 
-}
+};
